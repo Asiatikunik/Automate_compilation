@@ -7,7 +7,7 @@ typedef struct Caractere Caractere;
 struct Caractere {
 	char symbole;
 	int numero;
-	Caractere* caractere_suivant;
+	//Caractere* caractere_suivant;
 };
 
 //type état défini par un numéro, s'il est accepteur (1) ou non (0) et l'état suivant dans la liste
@@ -15,11 +15,12 @@ typedef struct Etat Etat;
 struct Etat {
 	int num;
 	int accepteur;
-	Etat* etat_suivant;
+	//Etat* etat_suivant;
 };
 
 /* type transition défini par un état de départ, un état d'arrivée, un
  * caractère de transition.
+ * liste chaînée
  */
 typedef struct Transition Transition;
 struct Transition{
@@ -43,7 +44,7 @@ struct AFND {
 	Etat* liste_etat;
 	Etat* etat_initial;
 	Transition** tab_transition;
-	AFND* automate_suivant;
+	//AFND* automate_suivant;
 };
 
 //Renvoie un automate non déterministe reconnaissant le langage vide
@@ -55,5 +56,20 @@ AFND* mot_vide();
 //Création d'un tableau de listes de transitions alloué dynamiquement
 Transition** init_tab_transition(int taille);
 
+//Création de la liste des caracteres allouée dynamiquement
+Caractere* init_list_caractere(int taille);
 
+//Création de la liste des états allouée dynamiquement
+Etat* init_list_etat(int taille);
+
+/*Transition* init_list_transition(int taille)
+{
+	Transition* list_transition = NULL;
+	list_transition = malloc(taille * sizeof(Transition));
+
+	for(int i=0;i<taille;i++)
+		list_transition[i] = NULL;
+
+	return list_transition;
+}*/
 #endif
