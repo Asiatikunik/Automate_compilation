@@ -6,7 +6,11 @@
 
 int main(){
 	
-	printf("Hello World ! \n");
+	AFND automate = langage_vide();
+	affichage_AFND(automate);
 
+	AFND automate2 = mot_vide();
+	affichage_AFND(automate2);
+	
 	return 0;
 }

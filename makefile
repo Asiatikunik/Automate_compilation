@@ -1,9 +1,10 @@
 
 CC = gcc
-CFLAGS = -Wall
+# CFLAGS = -Wall
+CFLAGS =
 EXEC = main
 OBJ = main.o automateFiniNonDeterministe.o
-HEAD = automateFiniNonDeterministe.h
+HEAD = automateFiniNonDeterministe.h constante.h
 
 
 all: clean $(EXEC) $(OBJ)
