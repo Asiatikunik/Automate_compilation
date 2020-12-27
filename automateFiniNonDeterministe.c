@@ -62,6 +62,23 @@ void affichage_AFND(AFND a){
 
 }
 
+Transition* init_arrayTransition()
+{
+	static Transition arrayTrans[TAILLE_TRANSITION];
+	for(int i=0; i<TAILLE_TRANSITION; i++)
+		arrayTrans[i].depart = -1;
+	return arrayTrans;
+}
+
+Etat* init_etat()
+{
+	static Etat etat[TAILLE_ETAT];
+	
+	for(int i=0; i<TAILLE_ETAT; i++)
+		etat.num = -1;
+	
+	return etat;
+}
 //Renvoie un automate fini non déterministe reconnaissant le langage vide
 // Si le premier numero du caractère de l'alphabet est -1, alors il est vide
 AFND langage_vide(){
@@ -70,8 +87,16 @@ AFND langage_vide(){
 	automate.taille_alphabet = 0;
 	automate.alphabet[0];
 
+	for(int i=0; i<TAILLE_ETAT;i++)
+	{
+		automate.etat = init_etat();
+	}
 	automate.nb_etats = 1;
-	automate.etat[1];
+
+	for(int i=0; i<TAILLE_ETAT;i++)
+	{
+		automate.etat[i].arrayTrans = init_arrayTransition();
+	}
 
 	automate.etat[0].num = 0;
 	automate.etat[0].initial = true;
@@ -89,8 +114,17 @@ AFND mot_vide(){
 	automate.taille_alphabet = 0;
 	automate.alphabet[0];
 
+	for(int i=0; i<TAILLE_ETAT;i++)
+	{
+		automate.etat = init_etat();
+	}
 	automate.nb_etats = 1;
-	automate.etat[1];
+	
+	for(int i=0; i<TAILLE_ETAT;i++)
+	{
+		automate.etat[i].arrayTrans = init_arrayTransition();
+	}
+	//automate.etat[1];
 
 	automate.etat[0].num = 0;
 	automate.etat[0].initial = true;
@@ -100,6 +134,140 @@ AFND mot_vide(){
 	return automate;
 }
 
+//Renvoie un automate fini non déterministe reconnaissant le language composé d'un mot d'un caractere passé en parametre
+AFND un_mot(char mot)
+{
+	AFND automate ;
+	Etat etat_initial,etat_final;
+	Transition transition;
+
+	for(int i=0; i<TAILLE_ETAT;i++)
+	{
+		automate.etat = init_etat();
+	}
+	
+	automate.nb_etats = 1;
+	etat_initial.num = 0;
+	etat_initial.initial = true;
+	etat_initial.accepteur = false;
+	etat_initial.nb_transition = 1;
+	
+	etat_final.num = 1;
+	etat_final.initial = false;
+	etat_final.accepteur = true;
+	etat_final.nb_transition = 1;
+
+	transition.depart = 0;
+	transition.caractere = mot;
+
+	for(int i=0; i<TAILLE_ETAT;i++)
+	{
+		automate.etat[i].arrayTrans = init_arrayTransition();
+	}
+	etat.initial.arrayTrans[0] = transition;
+
+	automate.taille_alphabet = 1;
+	automate.alphabet[0] = mot;
+	automate.nb_etats = 2;
+	automate.etat_init = etat_initial;
+	automate.etat[0] = etat_initial;
+	automate.etat[1] = etat_final;
+
+	return automate;
+}
+
+// Ajoute l'alphaber de a2 dans a1
+AFND reunion_alphabet(AFND a1, AFND a2) {
+	// Recherche pour avoir la taille du tableau
+	// et Ajoute au tableau
+	int count = a1.taille_alphabet;
+	bool flag = false;
+	for(int j=0; j<a2.taille_alphabet; j++) {
+		for(int i=0; i<a1.taille_alphabet; i++) {
+			if(a1.alphabet[i] == a2.alphabet[j]){
+				flag = true;
+				break;
+			}
+		}
+		if(flag == false){
+			a1.alphabet[count]=a2.alphabet[j];
+			count++;
+		}
+		flag = false;
+	}
+
+	a1.taille_alphabet = count;
+
+	return a1;
+}
+
+
+// Concatenation de a2 dans a1
+AFND concatenation_AFND(AFND a1, AFND a2){
+	// reunion_alphabet(a1, a2);
+
+	//Renvoie a1 s'il n'y a pas d'état accepteur dans a1
+	bool flag = false;
+	for(int i=0; i<a1.nb_etats; i++){
+		if( a1.etat[i].accepteur == true ){
+			flag = true;
+			break;
+		}
+	}
+}
+// Ajouter transition
+Transition* add_transition(Transition transition, Transition* arrayTrans)
+{
+	for(int i=0; i<TAILLE_TRANSITION; i++)
+	{
+		while(etat.arrayTrans[i].depart != -1)
+			continue;
+		arrayTrans[i].depart = transition.depart;
+		arrayTrans[i].caractere = transition.caractere;
+		return arrayTrans;
+	}
+}
+// Fermeture iterative de Kleene
+AFND kleene(AFND automate)
+{
+	Transition transition;
+	int j;
+
+	for(int i=0; i< TAILLE_ETAT; i++)
+	{
+		if(automate.etat[i].accepteur == true)
+		{
+			if(automate.etat[i] != automate.etat_init)
+			{
+				for(j=0; j<TAILLE_TRANSITION; j++)
+				{
+					while(j < automate.etat_init.num)
+						continue;
+					transition.depart = automate.etat[i].num;
+					transition.caractere = automate.etat[i].arrayTrans[j].caractere;
+					automate.etat[i].arrayTrans = add_transition(transition, automate.etat[i].arrayTrans);
+				}
+				
+			}
+		}
+	}
+
+	return automate;
+}
+//Retourne l'automate 1 avec son alphabet = reunion des alphabets des 2 automates en parametre
+/*AFND reunion_language(AFND automate1, AFND automate2)
+{
+	if(automate1.taille_alphabet == 0)
+	{
+		for(int i=0; i<TAILLE_ALPHABET; i++)
+			automate1.alphabet[i] = automate2.alphabet[i];
+		return automate1;
+	}
+	else if(automate2.taille_alphabet == 0)
+		return automate1;
+	
+		
+}*/
 //Création d'une liste de caractères 
 // Caractere* init_list_caractere(int taille) {
 // 	Caractere* list_caractere = NULL;

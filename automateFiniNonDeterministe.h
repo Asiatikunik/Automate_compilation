@@ -11,7 +11,7 @@ un état d'arrivée,
 un caractère de transition.
  */
 typedef struct Transition{
-	int arrivee;
+	int depart;
 	char caractere;
 } Transition;
 
@@ -26,7 +26,7 @@ typedef struct Etat {
 	bool initial;
 	bool accepteur;
 	int nb_transition;
-	Transition arrayTrans[TAILLE_TRANSITION];
+	Transition* arrayTrans;
 } Etat;
 
 
@@ -42,15 +42,29 @@ typedef struct AFND {
 	int taille_alphabet;
 	char alphabet[TAILLE_ALPHABET];
 	int nb_etats;
-	Etat etat[TAILLE_ETAT];
+	Etat etat_init;
+	Etat* etat;
 } AFND;
 
+//Initialise les numéros des états de départ de chaque transition à -1
+Transition* init_arrayTransition(Etat etat);
+
+//Initialise les numéros des états à -1
+Etat* init_etat();
 //Renvoie un automate non déterministe reconnaissant le langage vide
 AFND langage_vide();
 
 //Renvoie un automate non déterministe reconnaissant le mot vide
 AFND mot_vide();
 
+//Renvoie un automate fini non déterministe reconnaissant le language composé d'un mot d'un caractere passé en parametre
+AFND un_mot(char mot)
+
+//Reunion des languages de 2 automates
+void reunion_language(AFND automate1, AFND automate2);
+
+// Concatenation de a2 dans a1
+AFND concatenation_AFND(AFND a1, AFND a2)
 //Création d'un tableau de listes de transitions alloué dynamiquement
 // Transition** init_tab_transition(int taille);
 
