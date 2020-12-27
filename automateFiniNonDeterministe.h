@@ -47,7 +47,7 @@ typedef struct AFND {
 } AFND;
 
 //Initialise les numéros des états de départ de chaque transition à -1
-Transition* init_arrayTransition(Etat etat);
+Transition* init_arrayTransition();
 
 //Initialise les numéros des états à -1
 Etat* init_etat();
@@ -58,13 +58,13 @@ AFND langage_vide();
 AFND mot_vide();
 
 //Renvoie un automate fini non déterministe reconnaissant le language composé d'un mot d'un caractere passé en parametre
-AFND un_mot(char mot)
+AFND un_mot(char mot);
 
 //Reunion des languages de 2 automates
 void reunion_language(AFND automate1, AFND automate2);
 
 // Concatenation de a2 dans a1
-AFND concatenation_AFND(AFND a1, AFND a2)
+AFND concatenation_AFND(AFND a1, AFND a2);
 //Création d'un tableau de listes de transitions alloué dynamiquement
 // Transition** init_tab_transition(int taille);
 

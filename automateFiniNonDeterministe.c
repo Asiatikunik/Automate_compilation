@@ -55,7 +55,7 @@ void affichage_AFND(AFND a){
 	else{
 		for(int s=0; s<a.nb_etats; s++)
 			for(int k=0; k<a.etat->nb_transition; k++)
-				printf("(%d, %c, %d) ", a.etat->num, a.etat[s].arrayTrans[k].caractere, a.etat[s].arrayTrans[k].arrivee);
+				printf("(%d, %c, %d) ", a.etat->num, a.etat[s].arrayTrans[k].caractere, a.etat[s].arrayTrans[k].depart);
 	}
 	printf("\n\n");
 
@@ -75,7 +75,7 @@ Etat* init_etat()
 	static Etat etat[TAILLE_ETAT];
 	
 	for(int i=0; i<TAILLE_ETAT; i++)
-		etat.num = -1;
+		etat->num = -1;
 	
 	return etat;
 }
@@ -164,7 +164,7 @@ AFND un_mot(char mot)
 	{
 		automate.etat[i].arrayTrans = init_arrayTransition();
 	}
-	etat.initial.arrayTrans[0] = transition;
+	etat_initial.arrayTrans[0] = transition;
 
 	automate.taille_alphabet = 1;
 	automate.alphabet[0] = mot;
@@ -220,7 +220,7 @@ Transition* add_transition(Transition transition, Transition* arrayTrans)
 {
 	for(int i=0; i<TAILLE_TRANSITION; i++)
 	{
-		while(etat.arrayTrans[i].depart != -1)
+		while(arrayTrans[i].depart != -1)
 			continue;
 		arrayTrans[i].depart = transition.depart;
 		arrayTrans[i].caractere = transition.caractere;
@@ -237,7 +237,7 @@ AFND kleene(AFND automate)
 	{
 		if(automate.etat[i].accepteur == true)
 		{
-			if(automate.etat[i] != automate.etat_init)
+			if(automate.etat[i].initial == false)
 			{
 				for(j=0; j<TAILLE_TRANSITION; j++)
 				{
