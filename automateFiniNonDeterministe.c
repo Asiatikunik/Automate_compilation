@@ -62,6 +62,14 @@ void affichage_AFND(AFND a){
 
 }
 
+void afficher_alphabet(AFND a){
+	for(int i=0; i<a.taille_alphabet; i++){
+		printf("%c ", a.alphabet[i]);
+	}
+	printf("\n");
+}
+
+//Initialise les numéros des états de départ de chaque transition à -1
 Transition* init_arrayTransition()
 {
 	static Transition arrayTrans[TAILLE_TRANSITION];
@@ -70,6 +78,7 @@ Transition* init_arrayTransition()
 	return arrayTrans;
 }
 
+//Initialise les numéros des états à -1
 Etat* init_etat()
 {
 	static Etat etat[TAILLE_ETAT];
@@ -79,6 +88,7 @@ Etat* init_etat()
 	
 	return etat;
 }
+
 //Renvoie un automate fini non déterministe reconnaissant le langage vide
 // Si le premier numero du caractère de l'alphabet est -1, alors il est vide
 AFND langage_vide(){
@@ -215,6 +225,7 @@ AFND concatenation_AFND(AFND a1, AFND a2){
 		}
 	}
 }
+
 // Ajouter transition
 Transition* add_transition(Transition transition, Transition* arrayTrans)
 {
@@ -227,6 +238,8 @@ Transition* add_transition(Transition transition, Transition* arrayTrans)
 		return arrayTrans;
 	}
 }
+
+
 // Fermeture iterative de Kleene
 AFND kleene(AFND automate)
 {
@@ -254,77 +267,4 @@ AFND kleene(AFND automate)
 
 	return automate;
 }
-//Retourne l'automate 1 avec son alphabet = reunion des alphabets des 2 automates en parametre
-/*AFND reunion_language(AFND automate1, AFND automate2)
-{
-	if(automate1.taille_alphabet == 0)
-	{
-		for(int i=0; i<TAILLE_ALPHABET; i++)
-			automate1.alphabet[i] = automate2.alphabet[i];
-		return automate1;
-	}
-	else if(automate2.taille_alphabet == 0)
-		return automate1;
-	
-		
-}*/
-//Création d'une liste de caractères 
-// Caractere* init_list_caractere(int taille) {
-// 	Caractere* list_caractere = NULL;
-// 	list_caractere = malloc(taille * sizeof(Caractere));
-	
-// 	for(int i=0;i<taille;i++)
-// 		list_caractere[i] = NULL;
-	
-// 	return list_caractere;
-// }
 
-//Création d'une liste d'états
-// Etat* init_list_etat(int taille) {
-// 	Etat* list_etat = NULL;
-// 	list_etat = malloc(taille * sizeof(Etat));
-
-// 	for(int i=0;i<taille;i++)
-// 		list_etat[i] = NULL;
-	
-// 	return list_etat;
-// }
-
-//Création d'un tableau de listes de transitions alloué dynamiquement
-// Transition** init_tab_transition(int taille){
-// 	Transition** tab_transition = NULL;
-// 	int i;
-
-// 	tab_transition = malloc(taille * sizeof(Transition*));
-// 	for(i=0;i<taille;i++){
-// 		tab_transition[i] = NULL;
-// 	}
-
-// 	return tab_transition;
-// }
-
-/* Transition -> tab dynamique
-//Création d'une liste de transitions
-Transition* init_list_transition(int taille)
-{
-	Transition* list_transition = NULL;
-	list_transition = malloc(taille * sizeof(Transition));
-
-	for(int i=0;i<taille;i++)
-		list_transition[i] = NULL;
-
-	return list_transition;
-}
-
-//Création d'un tableau de listes de transitions alloué dynamiquement
-Transition** init_tab_transition(int taille_tab, int taille_transition){
-	Transition** tab_transition = NULL;
-
-	tab_transition = malloc(taille * sizeof(Transition*));
-	
-	for(int i=0;i<taille;i++){
-		tab_transition[i] = init_list_transition(taille_transition);
-	}
-
-	return tab_transition;
-}*/

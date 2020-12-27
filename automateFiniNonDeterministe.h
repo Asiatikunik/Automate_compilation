@@ -1,6 +1,7 @@
 #ifndef AUTOMATEFININONDETERMINISTE
 #define AUTOMATEFININONDETERMINISTE
 
+#include "automateFiniNonDeterministe.h"
 #include "constante.h"
 
 
@@ -46,11 +47,17 @@ typedef struct AFND {
 	Etat* etat;
 } AFND;
 
+//Affiche un automate fini non déterministe
+void affichage_AFND(AFND a);
+
+void afficher_alphabet(AFND a);
+
 //Initialise les numéros des états de départ de chaque transition à -1
 Transition* init_arrayTransition();
 
 //Initialise les numéros des états à -1
 Etat* init_etat();
+
 //Renvoie un automate non déterministe reconnaissant le langage vide
 AFND langage_vide();
 
@@ -60,28 +67,16 @@ AFND mot_vide();
 //Renvoie un automate fini non déterministe reconnaissant le language composé d'un mot d'un caractere passé en parametre
 AFND un_mot(char mot);
 
-//Reunion des languages de 2 automates
-void reunion_language(AFND automate1, AFND automate2);
+// Ajoute l'alphaber de a2 dans a1
+AFND reunion_alphabet(AFND a1, AFND a2);
 
 // Concatenation de a2 dans a1
 AFND concatenation_AFND(AFND a1, AFND a2);
-//Création d'un tableau de listes de transitions alloué dynamiquement
-// Transition** init_tab_transition(int taille);
 
-//Création de la liste des caracteres allouée dynamiquement
-// Caractere* init_list_caractere(int taille);
+// Ajouter transition
+Transition* add_transition(Transition transition, Transition* arrayTrans);
 
-//Création de la liste des états allouée dynamiquement
-// Etat* init_list_etat(int taille);
+// Fermeture iterative de Kleene
+AFND kleene(AFND automate);
 
-/*Transition* init_list_transition(int taille)
-{
-	Transition* list_transition = NULL;
-	list_transition = malloc(taille * sizeof(Transition));
-
-	for(int i=0;i<taille;i++)
-		list_transition[i] = NULL;
-
-	return list_transition;
-}*/
 #endif
