@@ -9,6 +9,7 @@
 //Affiche un automate fini non déterministe
 void affichage_AFND(AFND a){
 	bool flag_accepteur = false;
+	bool flag_transition = false;
 
 	printf("Alphabet: ");
 	if(a.taille_alphabet == false)
@@ -20,46 +21,65 @@ void affichage_AFND(AFND a){
 	}
 	printf("\n");
 
-	printf("Nombre d'états: %d \n", a.nb_etats);
-	printf("Etat d'initial: ");
-	for(int s=0; s<a.nb_etats; s++){
-		if(a.etat->initial == true)
-			printf("%d ", a.etat->num);
-	}
-	printf("\n");
-
-	printf("Etat accepteur: ");
-	for(int s=0; s<a.nb_etats; s++){
-		if(a.etat->accepteur == true){
-			flag_accepteur = true;
-			printf("%d ", a.etat->num);
-		}
-	}
-	if(flag_accepteur == false)
-		printf("Vide");
-	printf("\n");
+	// printf("Nombre d'états: %d \n", a.nb_etats);
 
 	printf("Liste des états: ");
 	if(a.nb_etats == 0){
 		printf("Vide");
 	}else{
 		for(int s=0; s<a.nb_etats; s++){
-			printf("%d ", a.etat->num);
+			printf("%d ", a.etat[s].num);
 		}
 	}
 	printf("\n");
 
-	printf("Transition: ");	
-	if(a.etat->nb_transition == 0)
-		printf("Vide");
-	else{
-		for(int s=0; s<a.nb_etats; s++)
-			for(int k=0; k<a.etat->nb_transition; k++)
-				printf("(%d, %c, %d) ", a.etat->num, a.etat[s].arrayTrans[k].caractere, a.etat[s].arrayTrans[k].arrivee);
+	printf("Etat d'initial: ");
+	for(int s=0; s<a.nb_etats; s++){
+		if(a.etat[s].initial == true)
+			printf("%d ", a.etat[s].num);
 	}
+	printf("\n");
+
+	printf("Etat accepteur: ");
+	for(int s=0; s<a.nb_etats; s++){
+		if(a.etat[s].accepteur == true){
+			flag_accepteur = true;
+			printf("%d ", a.etat[s].num);
+		}
+	}
+	if(flag_accepteur == false)
+		printf("Vide");
+	printf("\n");
+
+	printf("Transition: ");	
+	for(int s=0; s<a.nb_etats; s++)
+		for(int k=0; k<a.etat[s].nb_transition; k++){
+			printf("(%d, %c, %d) ", a.etat[s].num, a.etat[s].arrayTrans[k].caractere, a.etat[s].arrayTrans[k].arrivee);
+			flag_transition = true;
+		}
+	if(flag_transition == false) 
+		printf("Vide\n");
 	printf("\n\n");
 
 
+}
+
+// Permet de initialisé un etat de l'automate
+AFND set_etat(AFND automate, int num_etat, int num, bool initial, bool accepteur, int nb_transition){
+	automate.etat[num_etat].num = num;
+	automate.etat[num_etat].initial = initial;
+	automate.etat[num_etat].accepteur = accepteur;
+	automate.etat[num_etat].nb_transition = nb_transition;
+
+	return automate;
+}
+
+// Permet de initialisé un état UN transition d'un état de l'automate
+AFND set_transition(AFND automate, int num_etat, int num_trans, int arrivee, char caractere){
+	automate.etat[num_etat].arrayTrans[num_trans].arrivee = arrivee;
+	automate.etat[num_etat].arrayTrans[num_trans].caractere = caractere;
+
+	return automate;
 }
 
 void afficher_alphabet(AFND a){
@@ -198,7 +218,6 @@ AFND reunion_alphabet(AFND a1, AFND a2) {
 	return a1;
 }
 
-
 // Concatenation de a2 dans a1
 AFND concatenation_AFND(AFND a1, AFND a2){
 
@@ -216,8 +235,7 @@ AFND concatenation_AFND(AFND a1, AFND a2){
 	}
 	if(flag == false)
 		return a1;
-	
-	reunion_alphabet(a1, a2);
+
 
 	// Recherche l'état initial de a2 pour ses transitions
 	for(int i=0; i<a1.nb_etats; i++){ // Cherche s'il a un etat initial
@@ -227,10 +245,38 @@ AFND concatenation_AFND(AFND a1, AFND a2){
 			break;
 		}
 	}
+	if(flag == false)
+		return a1;
 
-	a1.etat[etatF_a1].nb_transition += a1.etat[etatI_a2].nb_transition;
+	// Retire l'état initial de a2
+	a2 .etat[etatI_a2].initial = false;
 
-	// for(int i=0; i<a1.)
+	// Retire l'état accepteur de a1
+	a1.etat[etatF_a1].accepteur = false;
+
+	a1 = reunion_alphabet(a1, a2);
+	
+	// Réunion des états
+	int count_etat = a1.nb_etats;
+	int count_trans;
+	for(int i=0; i<a2.nb_etats; i++) {
+		a1 = set_etat(a1, count_etat, count_etat-1, a2.etat[i].initial, a2.etat[i].accepteur, a2.etat[i].nb_transition);
+		for(int j=0; j<a2.etat[i].nb_transition; j++) {
+			a1 = set_transition(a1, count_etat, j, count_etat+a2.etat[i].arrayTrans[j].arrivee-1, a2.etat[i].arrayTrans[j].caractere);
+		}
+		count_etat++;
+	}
+	a1.nb_etats += a2.nb_etats;
+	a1.nb_etats--;
+
+	// Rajouter les transitions de a2 initial à a1 final
+	// for(int i=0; i<a1.etat[etatI_a2].nb_transition; i++) {
+	// 	a1 = set_transition(a1, etatF_a1, a2.etat[etatI_a2].nb_transition, a2.etat[etatI_a2].arrayTrans[i].arrivee, a2.etat[etatI_a2].arrayTrans[i].caractere);		
+	// }
+	// a1.etat[etatF_a1].nb_transition += a2.etat[etatI_a2].nb_transition;
+
+
+	return a1;
 
 }
 
