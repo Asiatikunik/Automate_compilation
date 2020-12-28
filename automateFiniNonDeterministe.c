@@ -55,7 +55,7 @@ void affichage_AFND(AFND a){
 	else{
 		for(int s=0; s<a.nb_etats; s++)
 			for(int k=0; k<a.etat->nb_transition; k++)
-				printf("(%d, %c, %d) ", a.etat->num, a.etat[s].arrayTrans[k].caractere, a.etat[s].arrayTrans[k].depart);
+				printf("(%d, %c, %d) ", a.etat->num, a.etat[s].arrayTrans[k].caractere, a.etat[s].arrayTrans[k].arrivee);
 	}
 	printf("\n\n");
 
@@ -70,23 +70,24 @@ void afficher_alphabet(AFND a){
 }
 
 //Initialise les numéros des états de départ de chaque transition à -1
-Transition* init_arrayTransition()
-{
-	static Transition arrayTrans[TAILLE_TRANSITION];
-	for(int i=0; i<TAILLE_TRANSITION; i++)
-		arrayTrans[i].depart = -1;
-	return arrayTrans;
+AFND init_arrayTransition(AFND a) {
+	for(int i=0; i<TAILLE_ETAT; i++)
+		for(int j=0; j<TAILLE_TRANSITION; j++)
+			a.etat[i].arrayTrans[j].arrivee = -1;
+		
+	return a;
 }
 
 //Initialise les numéros des états à -1
-Etat* init_etat()
-{
-	static Etat etat[TAILLE_ETAT];
+AFND init_etat(AFND a) {
+	for(int i=0; i<TAILLE_ETAT; i++){
+		a.etat[i].num = -1;
+		a.etat[i].initial = false;
+		a.etat[i].accepteur = false;
+		a.etat[i].nb_transition = 0;
+	}
 	
-	for(int i=0; i<TAILLE_ETAT; i++)
-		etat->num = -1;
-	
-	return etat;
+	return a;
 }
 
 //Renvoie un automate fini non déterministe reconnaissant le langage vide
@@ -97,20 +98,17 @@ AFND langage_vide(){
 	automate.taille_alphabet = 0;
 	automate.alphabet[0];
 
-	for(int i=0; i<TAILLE_ETAT;i++)
-	{
-		automate.etat = init_etat();
-	}
+	automate = init_etat(automate);
 	automate.nb_etats = 1;
 
-	for(int i=0; i<TAILLE_ETAT;i++)
-	{
-		automate.etat[i].arrayTrans = init_arrayTransition();
-	}
+	automate = init_arrayTransition(automate);
+		
 
 	automate.etat[0].num = 0;
 	automate.etat[0].initial = true;
-	automate.etat[0].accepteur = false;
+
+	// On les remet pour que ce soit clair vu qu'elles sont déjà initialisée de base
+	automate.etat[0].accepteur = false; 
 	automate.etat[0].nb_transition = 0;
 
 	return automate;
@@ -124,21 +122,16 @@ AFND mot_vide(){
 	automate.taille_alphabet = 0;
 	automate.alphabet[0];
 
-	for(int i=0; i<TAILLE_ETAT;i++)
-	{
-		automate.etat = init_etat();
-	}
+	automate = init_etat(automate);
 	automate.nb_etats = 1;
 	
-	for(int i=0; i<TAILLE_ETAT;i++)
-	{
-		automate.etat[i].arrayTrans = init_arrayTransition();
-	}
-	//automate.etat[1];
+	automate = init_arrayTransition(automate);
 
 	automate.etat[0].num = 0;
 	automate.etat[0].initial = true;
 	automate.etat[0].accepteur = true;
+
+	// On le remet pour que ce soit clair, parce qu'elle est déjà initialisé
 	automate.etat[0].nb_transition = 0;
 
 	return automate;
@@ -151,10 +144,7 @@ AFND un_mot(char mot)
 	Etat etat_initial,etat_final;
 	Transition transition;
 
-	for(int i=0; i<TAILLE_ETAT;i++)
-	{
-		automate.etat = init_etat();
-	}
+	automate = init_etat(automate);
 	
 	automate.nb_etats = 1;
 	etat_initial.num = 0;
@@ -167,13 +157,10 @@ AFND un_mot(char mot)
 	etat_final.accepteur = true;
 	etat_final.nb_transition = 1;
 
-	transition.depart = 0;
+	transition.arrivee = 0;
 	transition.caractere = mot;
 
-	for(int i=0; i<TAILLE_ETAT;i++)
-	{
-		automate.etat[i].arrayTrans = init_arrayTransition();
-	}
+	automate = init_arrayTransition(automate);
 	etat_initial.arrayTrans[0] = transition;
 
 	automate.taille_alphabet = 1;
@@ -214,57 +201,78 @@ AFND reunion_alphabet(AFND a1, AFND a2) {
 
 // Concatenation de a2 dans a1
 AFND concatenation_AFND(AFND a1, AFND a2){
-	// reunion_alphabet(a1, a2);
 
-	//Renvoie a1 s'il n'y a pas d'état accepteur dans a1
+	int etatF_a1;
+	int etatI_a2;
+
+	// Renvoie a1 s'il n'y a pas d'état accepteur dans a1
 	bool flag = false;
-	for(int i=0; i<a1.nb_etats; i++){
+	for(int i=0; i<a1.nb_etats; i++){ // Cherche s'il a un etat accepteur
 		if( a1.etat[i].accepteur == true ){
 			flag = true;
+			etatF_a1 = i;
 			break;
 		}
 	}
-}
+	if(flag == false)
+		return a1;
+	
+	reunion_alphabet(a1, a2);
 
-// Ajouter transition
-Transition* add_transition(Transition transition, Transition* arrayTrans)
-{
-	for(int i=0; i<TAILLE_TRANSITION; i++)
-	{
-		while(arrayTrans[i].depart != -1)
-			continue;
-		arrayTrans[i].depart = transition.depart;
-		arrayTrans[i].caractere = transition.caractere;
-		return arrayTrans;
-	}
-}
-
-
-// Fermeture iterative de Kleene
-AFND kleene(AFND automate)
-{
-	Transition transition;
-	int j;
-
-	for(int i=0; i< TAILLE_ETAT; i++)
-	{
-		if(automate.etat[i].accepteur == true)
-		{
-			if(automate.etat[i].initial == false)
-			{
-				for(j=0; j<TAILLE_TRANSITION; j++)
-				{
-					while(j < automate.etat_init.num)
-						continue;
-					transition.depart = automate.etat[i].num;
-					transition.caractere = automate.etat[i].arrayTrans[j].caractere;
-					automate.etat[i].arrayTrans = add_transition(transition, automate.etat[i].arrayTrans);
-				}
-				
-			}
+	// Recherche l'état initial de a2 pour ses transitions
+	for(int i=0; i<a1.nb_etats; i++){ // Cherche s'il a un etat initial
+		if( a2.etat[i].initial == true ){
+			flag = true;
+			etatI_a2 = i;
+			break;
 		}
 	}
 
-	return automate;
+	a1.etat[etatF_a1].nb_transition += a1.etat[etatI_a2].nb_transition;
+
+	// for(int i=0; i<a1.)
+
 }
+
+// // Ajouter transition
+// Transition* add_transition(Transition transition, Transition* arrayTrans)
+// {
+// 	for(int i=0; i<TAILLE_TRANSITION; i++)
+// 	{
+// 		while(arrayTrans[i].arrivee != -1)
+// 			continue;
+// 		arrayTrans[i].arrivee = transition.arrivee;
+// 		arrayTrans[i].caractere = transition.caractere;
+// 		return arrayTrans;
+// 	}
+// }
+
+
+// // Fermeture iterative de Kleene
+// AFND kleene(AFND automate)
+// {
+// 	Transition transition;
+// 	int j;
+
+// 	for(int i=0; i< TAILLE_ETAT; i++)
+// 	{
+// 		if(automate.etat[i].accepteur == true)
+// 		{
+// 			if(automate.etat[i].initial == false)
+// 			{
+// 				for(j=0; j<TAILLE_TRANSITION; j++)
+// 				{
+// 					while(j < automate.etat_init.num)
+// 						continue;
+// 					transition.arrivee = automate.etat[i].num;
+// 					transition.caractere = automate.etat[i].arrayTrans[j].caractere;
+// 					automate.etat[i].arrayTrans = add_transition(transition, automate.etat[i].arrayTrans);
+// 				}
+				
+// 			}
+// 		}
+// 	}
+
+// 	return automate;
+// }
 

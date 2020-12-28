@@ -12,7 +12,7 @@ un état d'arrivée,
 un caractère de transition.
  */
 typedef struct Transition{
-	int depart;
+	int arrivee;
 	char caractere;
 } Transition;
 
@@ -27,7 +27,7 @@ typedef struct Etat {
 	bool initial;
 	bool accepteur;
 	int nb_transition;
-	Transition* arrayTrans;
+	Transition arrayTrans[TAILLE_TRANSITION];
 } Etat;
 
 
@@ -44,7 +44,7 @@ typedef struct AFND {
 	char alphabet[TAILLE_ALPHABET];
 	int nb_etats;
 	Etat etat_init;
-	Etat* etat;
+	Etat etat[TAILLE_ETAT];
 } AFND;
 
 //Affiche un automate fini non déterministe
@@ -53,10 +53,10 @@ void affichage_AFND(AFND a);
 void afficher_alphabet(AFND a);
 
 //Initialise les numéros des états de départ de chaque transition à -1
-Transition* init_arrayTransition();
+AFND init_arrayTransition(AFND a);
 
 //Initialise les numéros des états à -1
-Etat* init_etat();
+AFND init_etat(AFND a);
 
 //Renvoie un automate non déterministe reconnaissant le langage vide
 AFND langage_vide();

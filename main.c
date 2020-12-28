@@ -7,28 +7,25 @@
 int main(){
 	
 	AFND a1;
-	a1.taille_alphabet = 3;
+	a1.nb_etats = 1;
+	a1.taille_alphabet = 1;
 	a1.alphabet[0] = 'a';
-	a1.alphabet[1] = 'b';
-	a1.alphabet[2] = 'c';
-	// affichage_AFND(a);
-	afficher_alphabet(a1);
 
-	AFND a2 = mot_vide();
-	a2.taille_alphabet = 4;
+	AFND a2;
+	a2.nb_etats = 2;
+	a2.taille_alphabet = 1;
 	a2.alphabet[0] = 'a';
-	a2.alphabet[1] = 'd';
-	a2.alphabet[2] = 'e';
-	a2.alphabet[3] = 'f';
-	// affichage_AFND(a2);
-	afficher_alphabet(a2);
+	// a2.etat = malloc(a2.nb_etats * sizeof(Etat));
+	// a2.etat[0].nb_transition = 1;
+	// a2.etat[0].arrayTrans.
+
 
 	printf("\n");
 
-	a1 = reunion_alphabet(a1, a2);
-	printf("new alphabet: \n");
-	afficher_alphabet(a1);
-	printf("%d \n", a1.taille_alphabet);
+	// a1 = reunion_alphabet(a1, a2);
+	// printf("new alphabet: \n");
+	// afficher_alphabet(a1);
+	// printf("%d \n", a1.taille_alphabet);
 	
 	return 0;
 }
