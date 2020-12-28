@@ -18,14 +18,16 @@ int main(){
 
 
 	AFND a2;
-	a2.nb_etats = 2;
+	a2.nb_etats = 3;
 	a2.taille_alphabet = 2;
 	a2.alphabet[0] = 'b';
 	a2.alphabet[1] = 'c';
 	a2 = set_etat(a2, 0, 0, true, false, 2);
-	a2 = set_etat(a2, 1, 1, false, true, 0);
+	a2 = set_etat(a2, 1, 1, false, false, 1);
+	a2 = set_etat(a2, 2, 2, false, true, 0);
 	a2 = set_transition(a2, 0, 0, 1, 'b');
 	a2 = set_transition(a2, 0, 1, 1, 'c');
+	a2 = set_transition(a2, 1, 0, 2, 'b');
 	affichage_AFND(a2);
 
 

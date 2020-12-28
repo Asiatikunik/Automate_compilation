@@ -158,8 +158,7 @@ AFND mot_vide(){
 }
 
 //Renvoie un automate fini non déterministe reconnaissant le language composé d'un mot d'un caractere passé en parametre
-AFND un_mot(char mot)
-{
+AFND un_mot(char mot) {
 	AFND automate ;
 	Etat etat_initial,etat_final;
 	Transition transition;
@@ -257,14 +256,16 @@ AFND concatenation_AFND(AFND a1, AFND a2){
 	a1 = reunion_alphabet(a1, a2);
 	
 	// Réunion des états
-	int count_etat = a1.nb_etats;
+	int count_etat = a1.nb_etats -1;
 	int count_trans;
+	int count = 0;
 	for(int i=0; i<a2.nb_etats; i++) {
-		a1 = set_etat(a1, count_etat, count_etat-1, a2.etat[i].initial, a2.etat[i].accepteur, a2.etat[i].nb_transition);
+		a1 = set_etat(a1, count_etat, count_etat, a2.etat[i].initial, a2.etat[i].accepteur, a2.etat[i].nb_transition);
 		for(int j=0; j<a2.etat[i].nb_transition; j++) {
-			a1 = set_transition(a1, count_etat, j, count_etat+a2.etat[i].arrayTrans[j].arrivee-1, a2.etat[i].arrayTrans[j].caractere);
+			a1 = set_transition(a1, count_etat, j, count_etat+a2.etat[i].arrayTrans[j].arrivee - count, a2.etat[i].arrayTrans[j].caractere);
 		}
 		count_etat++;
+		count++;
 	}
 	a1.nb_etats += a2.nb_etats;
 	a1.nb_etats--;
