@@ -4,7 +4,6 @@
 #include "automateFiniNonDeterministe.h"
 #include "constante.h"
 
-
 /* 
 type transition défini par un état de départ 
 L'état qui possède la transition est la transition de départ

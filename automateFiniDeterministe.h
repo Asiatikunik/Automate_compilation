@@ -34,9 +34,17 @@ typedef struct AFD {
 	Etat etat[TAILLE_ETAT];
 } AFD;
 
+// Permet de initialisé UN etat de l'automate
+AFD set_etat_afd(AFD automate, int num_etat, int num, bool initial, bool accepteur, int nb_transition);
+
+// Permet de initialisé un état UN transition d'un état de l'automate
+AFD set_transition_afd(AFD automate, int num_etat, int num_trans, int arrivee, char caractere);
+
 TabTrans init_tabTrans(TabTrans tt);
 void afficher_tabTrans(TabTrans tt);
-TabTrans recupere_tabTransitionBis(AFND a);
-
+TabTrans recupere_tabTransitionBis(AFD a);
+Etat find_etat(AFD automate, int num);
+Trans getTransition(TabTrans tabTrans, Etat etat, char lettre);
+void execution_afd(AFD automate, char* mot);
 
 #endif

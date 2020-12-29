@@ -5,7 +5,6 @@
 #include "automateFiniNonDeterministe.h"
 #include "constante.h"
 
-
 //Affiche un automate fini non déterministe
 void affichage_AFND(AFND a){
 	bool flag_accepteur = false;
