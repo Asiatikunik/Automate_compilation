@@ -3,8 +3,8 @@ CC = gcc
 # CFLAGS = -Wall
 CFLAGS =
 EXEC = main
-OBJ = main.o automateFiniNonDeterministe.o
-HEAD = automateFiniNonDeterministe.h constante.h
+OBJ = main.o automateFiniNonDeterministe.o automateFiniDeterministe.o
+HEAD = automateFiniNonDeterministe.h automateFiniDeterministe.h constante.h
 
 
 all: clean $(EXEC) $(OBJ)
@@ -17,6 +17,9 @@ main.o: main.c $(HEAD)
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 automateFiniNonDeterministe.o: automateFiniNonDeterministe.c $(HEAD)
+	$(CC) -o $@ -c $< $(CFLAGS)
+
+automateFiniDeterministe.o: automateFiniDeterministe.c $(HEAD)
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 clean: 
