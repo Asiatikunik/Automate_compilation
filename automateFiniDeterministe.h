@@ -5,17 +5,10 @@
 #include "automateFiniDeterministe.h"
 #include "constante.h"
 
-// Structure pour faire un tableau de transition
-// Une aide pour la partie deterministe
-typedef struct Trans{
-	int depart;
-	char caractere;
-	int arrive;
-} Trans;
 
 typedef struct TabTrans{
 	int taille;
-	Trans array[TAILLE_TRANSITION];
+	Transition array[TAILLE_TRANSITION];
 } TabTrans;
 
 /* C'est la même chose que l'automate fini NON deterministe
@@ -44,7 +37,7 @@ TabTrans init_tabTrans(TabTrans tt);
 void afficher_tabTrans(TabTrans tt);
 TabTrans recupere_tabTransitionBis(AFD a);
 Etat find_etat(AFD automate, int num);
-Trans getTransition(TabTrans tabTrans, Etat etat, char lettre);
+Transition getTransition(TabTrans tabTrans, Etat etat, char lettre);
 void execution_afd(AFD automate, char* mot);
 
 #endif

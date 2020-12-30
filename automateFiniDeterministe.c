@@ -26,7 +26,7 @@ TabTrans recupere_tabTransitionBis(AFD a) {
 		for(int k=0; k<a.etat[s].nb_transition; k++){
 				tt.array[count].depart = a.etat[s].num;
 				tt.array[count].caractere = a.etat[s].arrayTrans[k].caractere;
-				tt.array[count].arrive = a.etat[s].arrayTrans[k].arrivee;
+				tt.array[count].arrive = a.etat[s].arrayTrans[k].arrive;
 			count++;
 		}
 	printf("\n");
@@ -50,8 +50,8 @@ AFD set_etat_afd(AFD automate, int num_etat, int num, bool initial, bool accepte
 }
 
 // Permet de initialisé un état UN transition d'un état de l'automate
-AFD set_transition_afd(AFD automate, int num_etat, int num_trans, int arrivee, char caractere){
-	automate.etat[num_etat].arrayTrans[num_trans].arrivee = arrivee;
+AFD set_transition_afd(AFD automate, int num_etat, int num_trans, int arrive, char caractere){
+	automate.etat[num_etat].arrayTrans[num_trans].arrive = arrive;
 	automate.etat[num_etat].arrayTrans[num_trans].caractere = caractere;
 
 	return automate;
@@ -73,13 +73,10 @@ Etat find_etat(AFD automate, int num)
 	return etat;
 }
 
-Trans getTransition(TabTrans tabTrans, Etat etat, char lettre)
-{
-	Trans transition;
-	for(int i=0; i<TAILLE_TRANSITION; i++)
-	{
-		if(tabTrans.array[i].depart == etat.num && tabTrans.array[i].caractere == lettre)
-		{
+Transition getTransition(TabTrans tabTrans, Etat etat, char lettre) {
+	Transition transition;
+	for(int i=0; i<TAILLE_TRANSITION; i++) {
+		if(tabTrans.array[i].depart == etat.num && tabTrans.array[i].caractere == lettre) {
 			transition.depart = etat.num;
 			transition.caractere = lettre;
 			transition.arrive = tabTrans.array[i].arrive;
@@ -96,7 +93,7 @@ void execution_afd(AFD automate, char* mot)
 	int taille_mot = 0;
 	bool found = false;
 	TabTrans tabTrans;
-	Trans transition;
+	Transition transition;
 	Etat etat = automate.etat_init;
 	while(mot[i] != '\n' && mot[i] != '\n')
 	{

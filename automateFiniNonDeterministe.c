@@ -53,7 +53,7 @@ void affichage_AFND(AFND a){
 	printf("Transition: ");	
 	for(int s=0; s<a.nb_etats; s++)
 		for(int k=0; k<a.etat[s].nb_transition; k++){
-			printf("(%d, %c, %d) ", a.etat[s].num, a.etat[s].arrayTrans[k].caractere, a.etat[s].arrayTrans[k].arrivee);
+			printf("(%d, %c, %d) ", a.etat[s].num, a.etat[s].arrayTrans[k].caractere, a.etat[s].arrayTrans[k].arrive);
 			flag_transition = true;
 		}
 	if(flag_transition == false) 
@@ -74,8 +74,8 @@ AFND set_etat(AFND automate, int num_etat, int num, bool initial, bool accepteur
 }
 
 // Permet de initialisé un état UN transition d'un état de l'automate
-AFND set_transition(AFND automate, int num_etat, int num_trans, int arrivee, char caractere){
-	automate.etat[num_etat].arrayTrans[num_trans].arrivee = arrivee;
+AFND set_transition(AFND automate, int num_etat, int num_trans, int arrive, char caractere){
+	automate.etat[num_etat].arrayTrans[num_trans].arrive = arrive;
 	automate.etat[num_etat].arrayTrans[num_trans].caractere = caractere;
 
 	return automate;
@@ -92,7 +92,7 @@ void afficher_alphabet(AFND a){
 AFND init_arrayTransition(AFND a) {
 	for(int i=0; i<TAILLE_ETAT; i++)
 		for(int j=0; j<TAILLE_TRANSITION; j++)
-			a.etat[i].arrayTrans[j].arrivee = -1;
+			a.etat[i].arrayTrans[j].arrive = -1;
 		
 	return a;
 }
@@ -175,7 +175,7 @@ AFND un_mot(char mot) {
 	etat_final.accepteur = true;
 	etat_final.nb_transition = 1;
 
-	transition.arrivee = 0;
+	transition.arrive = 0;
 	transition.caractere = mot;
 
 	automate = init_arrayTransition(automate);
@@ -261,7 +261,7 @@ AFND concatenation_AFND(AFND a1, AFND a2){
 	for(int i=0; i<a2.nb_etats; i++) {
 		a1 = set_etat(a1, count_etat, count_etat, a2.etat[i].initial, a2.etat[i].accepteur, a2.etat[i].nb_transition);
 		for(int j=0; j<a2.etat[i].nb_transition; j++) {
-			a1 = set_transition(a1, count_etat, j, count_etat+a2.etat[i].arrayTrans[j].arrivee - count, a2.etat[i].arrayTrans[j].caractere);
+			a1 = set_transition(a1, count_etat, j, count_etat+a2.etat[i].arrayTrans[j].arrive - count, a2.etat[i].arrayTrans[j].caractere);
 		}
 		count_etat++;
 		count++;
@@ -285,9 +285,9 @@ AFND concatenation_AFND(AFND a1, AFND a2){
 // {
 // 	for(int i=0; i<TAILLE_TRANSITION; i++)
 // 	{
-// 		while(arrayTrans[i].arrivee != -1)
+// 		while(arrayTrans[i].arrive != -1)
 // 			continue;
-// 		arrayTrans[i].arrivee = transition.arrivee;
+// 		arrayTrans[i].arrive = transition.arrive;
 // 		arrayTrans[i].caractere = transition.caractere;
 // 		return arrayTrans;
 // 	}
@@ -310,7 +310,7 @@ AFND concatenation_AFND(AFND a1, AFND a2){
 // 				{
 // 					while(j < automate.etat_init.num)
 // 						continue;
-// 					transition.arrivee = automate.etat[i].num;
+// 					transition.arrive = automate.etat[i].num;
 // 					transition.caractere = automate.etat[i].arrayTrans[j].caractere;
 // 					automate.etat[i].arrayTrans = add_transition(transition, automate.etat[i].arrayTrans);
 // 				}

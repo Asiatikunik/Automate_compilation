@@ -11,8 +11,9 @@ un état d'arrivée,
 un caractère de transition.
  */
 typedef struct Transition{
-	int arrivee;
+	int depart;
 	char caractere;
+	int arrive;
 } Transition;
 
 /*
