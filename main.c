@@ -8,28 +8,37 @@
 
 int main(){
 
-	// AFD a;
-	// char mot[10];
+	AFND a1;
+	a1.nb_etats = 2;
+	a1.taille_alphabet = 1;
+	a1.alphabet[0] = 'a';
 
-	// a.nb_etats = 2;
-	// a.taille_alphabet = 3;
-	// a.alphabet[0] = 'a';
-	// a.alphabet[1] = 'b';
-	// a = set_etat_afd(a, 0, 0, true, false, 2);
-	// a = set_etat_afd(a, 1, 1, false, true, 2);
-	// a = set_etat_afd(a, 2, 2, false, true, 2);
-	// a = set_transition_afd(a, 0, 0, 1, 'a');
-	// a = set_transition_afd(a, 0, 1, 1, 'b');
-	// a = set_transition_afd(a, 1, 1, 2, 'b');
-	// //affichage_AFND(a);
+	a1 = set_etat(a1, 0, 0, true, false, 1);
+	a1 = set_etat(a1, 1, 1, false, true, 0);
+	a1 = set_transition(a1, 0, 0, 1, 'a');
+	affichage_AFND(a1);
 
-	// printf("Entrez le mot : ");
-	// fgets(mot, 10, stdin);
 
-	// execution_afd(a, mot);
+	AFND a2;
+	a2.nb_etats = 4;
+	a2.taille_alphabet = 2;
+	a2.alphabet[0] = 'b';
+	a2.alphabet[1] = 'c';
+	a2 = set_etat(a2, 0, 0, true, false, 2);
+	a2 = set_etat(a2, 1, 1, false, false, 1);
+	a2 = set_etat(a2, 2, 2, false, false, 1);
+	a2 = set_etat(a2, 3, 3, false, true, 0);
+	a2 = set_transition(a2, 0, 0, 1, 'b');
+	a2 = set_transition(a2, 0, 1, 1, 'c');
+	a2 = set_transition(a2, 1, 0, 2, 'b');
+	a2 = set_transition(a2, 2, 0, 3, 'b');
+	affichage_AFND(a2);
 
-	/*TabTrans tt;
-	tt = recupere_tabTransitionBis(a);*/
+
+	printf("\n");
+
+	a1= reunion_automate(a1, a2);
+	affichage_AFND(a1);
 	
 	return 0;
 }

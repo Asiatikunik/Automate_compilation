@@ -75,8 +75,9 @@ AFND set_etat(AFND automate, int num_etat, int num, bool initial, bool accepteur
 
 // Permet de initialisé un état UN transition d'un état de l'automate
 AFND set_transition(AFND automate, int num_etat, int num_trans, int arrive, char caractere){
-	automate.etat[num_etat].arrayTrans[num_trans].arrive = arrive;
+	automate.etat[num_etat].arrayTrans[num_trans].depart = num_etat;
 	automate.etat[num_etat].arrayTrans[num_trans].caractere = caractere;
+	automate.etat[num_etat].arrayTrans[num_trans].arrive = arrive;
 
 	return automate;
 }
@@ -190,6 +191,43 @@ AFND un_mot(char mot) {
 
 	return automate;
 }
+
+// Fait la réunion de deux automates et le met dans a1
+// L'état initial est forcement 0
+AFND reunion_automate(AFND a1, AFND a2) {
+	a1 = reunion_alphabet(a1, a2);
+
+	int num_etat = a1.nb_etats;
+
+	for(int i=1; i<a2.nb_etats; i++) {
+		a1 = set_etat(a1, num_etat+i-1, num_etat+i-1, a2.etat[i].initial, a2.etat[i].accepteur, a2.etat[i].nb_transition);
+	}
+
+	for(int i=0; i<a2.nb_etats; i++){
+		for(int j=0; j<a2.etat[i].nb_transition; j++){
+			if(i == 0){
+				a1 = set_transition(a1, 0, a1.etat[i].nb_transition+j, num_etat+i, a2.etat[i].arrayTrans[j].caractere);
+			}else{
+				// a1 = set_transition(a1, num_etat+j, j, num_etat, a2.etat[num_etat].arrayTrans[j].caractere);
+				a1 = set_transition(a1, num_etat+j-1, j, num_etat, a2.etat[i].arrayTrans[j].caractere);
+				// printf("(%d, %c, %d) \n", a2.etat[i].num, a2.etat[i].arrayTrans[j].caractere, a2.etat[i].arrayTrans[j].arrive);
+				// printf("num_etat: %d \n", num_etat);
+				// printf("j: %d \n\n", j);
+			}
+		}	
+		if(i == 0) 
+			a1.etat[0].nb_transition += a2.etat[0].nb_transition;
+		else
+			a1.etat[0].nb_transition += a2.etat[num_etat].nb_transition;
+		num_etat++;
+	}	
+
+	a1.nb_etats += a2.nb_etats -1;
+	// AFND set_etat(AFND automate, int num_etat, int num, bool initial, bool accepteur, int nb_transition);
+
+	return a1;
+}
+// AFND set_transition(AFND automate, int num_etat, int num_trans, int arrive, char caractere);
 
 // Ajoute l'alphaber de a2 dans a1
 AFND reunion_alphabet(AFND a1, AFND a2) {

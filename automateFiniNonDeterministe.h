@@ -54,7 +54,7 @@ void affichage_AFND(AFND a);
 AFND set_etat(AFND automate, int num_etat, int num, bool initial, bool accepteur, int nb_transition);
 
 // Permet de initialisé un état UN transition d'un état de l'automate
-AFND set_transition(AFND automate, int num_etat, int num_trans, int arrivee, char caractere);
+AFND set_transition(AFND automate, int num_etat, int num_trans, int arrive, char caractere);
 
 void afficher_alphabet(AFND a);
 
@@ -72,6 +72,9 @@ AFND mot_vide();
 
 //Renvoie un automate fini non déterministe reconnaissant le language composé d'un mot d'un caractere passé en parametre
 AFND un_mot(char mot);
+
+// Fait la réunion de deux automates et le met dans a1
+AFND reunion_automate(AFND a1, AFND a2);
 
 // Ajoute l'alphaber de a2 dans a1
 AFND reunion_alphabet(AFND a1, AFND a2);
