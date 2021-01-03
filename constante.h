@@ -12,5 +12,6 @@ Ce sont les tailles maximums des tableaux, a modifié si on veut faire plus gran
 #define TAILLE_ALPHABET 35
 #define TAILLE_ETAT 35
 #define TAILLE_TRANSITION 50
+#define TAILLE_TAB 10
 
 #endif

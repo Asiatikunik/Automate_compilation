@@ -8,37 +8,49 @@
 
 int main(){
 
-	AFND a1;
-	a1.nb_etats = 2;
-	a1.taille_alphabet = 1;
-	a1.alphabet[0] = 'a';
+	AFD a;
+	a.nb_etats = 8;
+	a.taille_alphabet = 2;
+	a.alphabet[0] = 'a';
+	a.alphabet[1] = 'b';
 
-	a1 = set_etat(a1, 0, 0, true, false, 1);
-	a1 = set_etat(a1, 1, 1, false, true, 0);
-	a1 = set_transition(a1, 0, 0, 1, 'a');
-	affichage_AFND(a1);
+	a = set_etat_AFD(a, 0, 0, true, false, 2);
+	a = set_transition_AFD(a, 0, 0, 0, 'a');
+	a = set_transition_AFD(a, 0, 1, 4, 'b');
 
+	a = set_etat_AFD(a, 1, 1, false, false, 2);
+	a = set_transition_AFD(a, 1, 0, 1, 'a');
+	a = set_transition_AFD(a, 1, 1, 4, 'b');
 
-	AFND a2;
-	a2.nb_etats = 4;
-	a2.taille_alphabet = 2;
-	a2.alphabet[0] = 'b';
-	a2.alphabet[1] = 'c';
-	a2 = set_etat(a2, 0, 0, true, false, 2);
-	a2 = set_etat(a2, 1, 1, false, false, 1);
-	a2 = set_etat(a2, 2, 2, false, false, 1);
-	a2 = set_etat(a2, 3, 3, false, true, 0);
-	a2 = set_transition(a2, 0, 0, 1, 'b');
-	a2 = set_transition(a2, 0, 1, 1, 'c');
-	a2 = set_transition(a2, 1, 0, 2, 'b');
-	a2 = set_transition(a2, 2, 0, 3, 'b');
-	affichage_AFND(a2);
+	a = set_etat_AFD(a, 2, 2, false, false, 2);
+	a = set_transition_AFD(a, 2, 0, 3, 'a');
+	a = set_transition_AFD(a, 2, 1, 5, 'b');
+	
+	a = set_etat_AFD(a, 3, 3, false, false, 2);
+	a = set_transition_AFD(a, 3, 0, 2, 'a');
+	a = set_transition_AFD(a, 3, 1, 7, 'b');
 
+	a = set_etat_AFD(a, 4, 4, false, false, 2);
+	a = set_transition_AFD(a, 4, 0, 1, 'a');
+	a = set_transition_AFD(a, 4, 1, 3, 'b');
 
-	printf("\n");
+	a = set_etat_AFD(a, 5, 5, false, true, 2);
+	a = set_transition_AFD(a, 5, 0, 2, 'a');
+	a = set_transition_AFD(a, 5, 1, 6, 'b');
 
-	a1= reunion_automate(a1, a2);
-	affichage_AFND(a1);
+	a = set_etat_AFD(a, 6, 6, false, true, 2);
+	a = set_transition_AFD(a, 6, 0, 7, 'a');
+	a = set_transition_AFD(a, 6, 1, 6, 'b');
+
+	a = set_etat_AFD(a, 7, 7, false, true, 2);
+	a = set_transition_AFD(a, 7, 0, 6, 'a');
+	a = set_transition_AFD(a, 7, 1, 6, 'b');
+
+	// affichage_AFD(a);
+
+	// a = minimisation(a);
+	a=minimisation2(a);
+	affichage_AFD(a);
 	
 	return 0;
 }

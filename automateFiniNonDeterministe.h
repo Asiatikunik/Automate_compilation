@@ -51,10 +51,10 @@ typedef struct AFND {
 void affichage_AFND(AFND a);
 
 // Permet de initialisé UN etat de l'automate
-AFND set_etat(AFND automate, int num_etat, int num, bool initial, bool accepteur, int nb_transition);
+AFND set_etat_AFND(AFND automate, int num_etat, int num, bool initial, bool accepteur, int nb_transition);
 
 // Permet de initialisé un état UN transition d'un état de l'automate
-AFND set_transition(AFND automate, int num_etat, int num_trans, int arrive, char caractere);
+AFND set_transition_AFND(AFND automate, int num_etat, int num_trans, int arrive, char caractere);
 
 void afficher_alphabet(AFND a);
 
