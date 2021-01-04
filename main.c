@@ -18,7 +18,7 @@ int main(){
 	printf("Veillez choisir une option.\n");
 	printf("1) Renvoie un Automate Standard du langage vide\n");
 	printf("2) Renvoie un Automate Standard du mot vide\n");
-	printf("3) Renvoie un Automate composé d'un mot passer en paramètre\n");
+	printf("3) Renvoie un Automate composé d'un mot passé en paramètre\n");
 	printf("4) Renvoie un Automate qui fait la réunion de deux automates\n");
 	printf("5) Renvoie la concaténation de deux automates\n");
 	printf("6) Renvoie un automate mit a l'étoile\n");
@@ -115,9 +115,21 @@ int main(){
 			break;
 		case 6:
 			printf("\n****Mise a l'étoile****\n");
-			/*
-		Ton truc a l'étoile
-			*/
+			a1.nb_etats = 3;
+			a1.taille_alphabet = 2;
+			a1.alphabet[0] = 'a';
+			a1.alphabet[1] = 'b';
+
+			a1 = set_etat_AFND(a1, 0, 0, true, false, 2);
+			a1 = set_etat_AFND(a1, 1, 1, false, true, 1);
+			a1 = set_etat_AFND(a1, 2, 2, false, true, 1);
+
+			a1 = set_transition_AFND(a1, 0, 1, 1, 'a');
+			a1 = set_transition_AFND(a1, 0, 2, 2, 'b');
+
+			a1 = kleene(a1);
+			printf("**Automate Final**\n");
+			affichage_AFND(a1);
 			break;
 		case 7:
 			printf("\n****La minimisation****\n");

@@ -312,45 +312,46 @@ AFND concatenation_AFND(AFND a1, AFND a2){
 
 }
 
-// // Ajouter transition
-// Transition* add_transition(Transition transition, Transition* arrayTrans)
-// {
-// 	for(int i=0; i<TAILLE_TRANSITION; i++)
-// 	{
-// 		while(arrayTrans[i].arrive != -1)
-// 			continue;
-// 		arrayTrans[i].arrive = transition.arrive;
-// 		arrayTrans[i].caractere = transition.caractere;
-// 		return arrayTrans;
-// 	}
-// }
+ //Ajouter transition
+Transition* add_transition(Transition transition, Transition* arrayTrans)
+ {
+ 	for(int i=0; i<TAILLE_TRANSITION; i++)
+ 	{
+ 		while(arrayTrans[i].arrive != -1)
+ 			continue;
+ 		arrayTrans[i].arrive = transition.arrive;
+ 		arrayTrans[i].caractere = transition.caractere;
+		break;
+ 		
+ 	}
+	return arrayTrans;
+ }
 
 
-// // Fermeture iterative de Kleene
-// AFND kleene(AFND automate)
-// {
-// 	Transition transition;
-// 	int j;
+ //Fermeture iterative de Kleene
+ AFND kleene(AFND automate)
+ {
+ 	Transition transition;
+ 	int j;
 
-// 	for(int i=0; i< TAILLE_ETAT; i++)
-// 	{
-// 		if(automate.etat[i].accepteur == true)
-// 		{
-// 			if(automate.etat[i].initial == false)
-// 			{
-// 				for(j=0; j<TAILLE_TRANSITION; j++)
-// 				{
-// 					while(j < automate.etat_init.num)
-// 						continue;
-// 					transition.arrive = automate.etat[i].num;
-// 					transition.caractere = automate.etat[i].arrayTrans[j].caractere;
-// 					automate.etat[i].arrayTrans = add_transition(transition, automate.etat[i].arrayTrans);
-// 				}
-				
-// 			}
-// 		}
-// 	}
+ 	for(int i=0; i< TAILLE_ETAT; i++)
+ 	{
+ 		if(automate.etat[i].accepteur == true)				//on boucle que sur les états accepteurs
+ 		{
+ 			if(automate.etat[i].initial == false)			
+ 			{
+ 				for(j=0; j<TAILLE_TRANSITION; j++)
+ 				{
+ 					while(j < automate.etat_init.num)		//on boucle dans la liste des transitions jusqu'à ce qu'on arrive aux états non initiaux
+ 						continue;
+ 					transition.arrive = automate.etat[i].num;
+ 					transition.caractere = automate.etat[i].arrayTrans[j].caractere;
+ 					automate.etat[i].arrayTrans[j] = transition;                   //on ajoute cette transition dans la liste
+ 				}
+ 			}
+ 		}
+ 	}
 
-// 	return automate;
-// }
+ 	return automate;
+ }
 
