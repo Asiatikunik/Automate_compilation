@@ -47,9 +47,6 @@ AFD set_transition_afd(AFD automate, int num_etat, int num_trans, int arrivee, c
 // minimisation ld'un automate
 AFD minimisation(AFD a);
 
-// minimisation ld'un automate
-AFD minimisation2(AFD a);
-
 TabTrans init_tabTrans(TabTrans tt);
 
 // Permet d'afficher un tableau de transition 

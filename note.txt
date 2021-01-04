@@ -1,4 +1,0 @@
-
-Dans les transitions,:
-	On a choisie de mettre les transitions dans l'état parce que chaque transition a bien un commancement. Cela nous évite de faire un tableau de liste. Et comme cela, on aura un tableau simple. 
-	On a choisie de mettre le numéro de l'état pour ne pas avoir de redondance.

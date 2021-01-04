@@ -91,22 +91,9 @@ TabTrans2 recupere_tabTransition2(AFD a) {
 					tt.array[s][alph] = a.etat[s].arrayTrans[k].arrive;
 				}
 			}
-				// tt.array[s][alph] = a.etat[s].arrayTrans[k].arrive;
 		}
 	}
 
-	// for(int i=0; i< a.nb_etats; i++){
-	// 	for(int j=0; j < a.taille_alphabet; j++){
-	// 		printf("Array[%d][%d] = [%d]:    ", i, j, tt.array[i][j]);
-	// 	}
-	// 	printf("\n");
-	// }
-		
-		
-
-	// tt.taille = count;
-
-	// afficher_tabTrans(tt);
 	return tt;
 }
 
@@ -181,28 +168,19 @@ bool existe_tab(int* tab, int taille, int indice){
 bool isUnique(int* tab, int taille, int valeur){
 	int count = 0;
 	for(int i=0; i<taille; i++)
-		if(tab[i] == valeur){
+		if(tab[i] == valeur)
 			count++;
-		} 
+		
 			
 			
-	if(count == 1){
+	if(count == 1)
 		return true;
-	}else{
+	else
 		return false;
-	}		
+		
 }
 
-// bool isUnique(int* tab,int taille){
-// 	bool x = false;
-// 	for(int i=0; i<taille; i++){
-
-// 	}
-
-// 	return x;
-// }
-
-AFD minimisation2(AFD a){
+AFD minimisation(AFD a){
 	
 	TabTrans2 tt = recupere_tabTransition2(a);
 	int groupe2d[tt.taille_etat][tt.taille_alph];
@@ -282,14 +260,6 @@ AFD minimisation2(AFD a){
 		currentGroups = groupe_different_tt(groupe,tt.taille_etat);
 	}
 
-	// 	printf("\n");
-	// for(int i=0; i<a.nb_etats; i++)
-	// 	printf("%d ", i);
-	// printf("\n");
-	// for(int i=0; i<a.nb_etats; i++)
-	// 	printf("%d ", groupe[i]);
-	// printf("\n\n\n");
-
 	returned.nb_etats = groupe_different_tt(groupe, a.nb_etats);
 	returned.taille_alphabet = a.taille_alphabet;
 	for(int i=0; i<a.taille_alphabet; i++){
@@ -298,7 +268,6 @@ AFD minimisation2(AFD a){
 
 	for(int i=0; i<a.nb_etats; i++) // cherche état initial
 		if(a.etat[i].initial == true){
-			printf("%d \n", i);
 			returned = set_etat_AFD(returned, 0, 0, true, false, a.etat[i].nb_transition);
 			for(int j=0; j<a.etat[i].nb_transition; j++){
 				returned = set_transition_AFD(returned, i, j, a.etat[i].arrayTrans[j].arrive, a.etat[i].arrayTrans[j].caractere);
@@ -318,119 +287,6 @@ AFD minimisation2(AFD a){
 
 	return returned;
 
-}
-
-// Normalement c'est un AFND en paramètre 
-AFD minimisation(AFD a){
-	int groupe[a.nb_etats];
-	bool flag = true;
-	int group = 2;
-	int depart, arrive, depart2, arrive2;
-	int tmp;
-	char caractere, caractere2;
-	TabTrans tt = recupere_tabTransitionBis(a);
-	AFD returned;
-
-	for(int i=0; i<a.nb_etats; i++) // Set le tableau en groupe
-		if(a.etat[i].accepteur == false)
-			groupe[i] = 0;
-		else
-			groupe[i] = 1;
-	
-	while(flag == true){ // Changer les groupes du tableau
-		flag = false;
-		for(int i=0; i<tt.taille; i=i+2){
-			depart = tt.array[i].depart;
-			arrive = tt.array[i].arrive;
-			depart2 = tt.array[i+1].depart;
-			arrive2 = tt.array[i+1].arrive;
-			if( (groupe[depart] != groupe[arrive] || groupe[depart2] != groupe[arrive2]) && existe_tab(groupe, a.nb_etats, depart) == true){
-				groupe[depart] = groupe_different_tt(groupe, a.nb_etats);
-				// printf("%d: %d -> %d // %d => %d\n", i, groupe[depart], groupe[arrive], depart, arrive);
-				flag = true;
-			}
-		}
-	}
-
-
-	printf("\n");
-	for(int i=0; i<a.nb_etats; i++)
-		printf("%d ", i);
-	printf("\n");
-	for(int i=0; i<a.nb_etats; i++)
-		printf("%d ", groupe[i]);
-	printf("\n\n\n");
-
-	// Savoir si les groupes d'états ont le même comportement
-	// Si c'est le cas, alors on les met dans le même groupe
-	// for(int i=0; i<a.nb_etats-1; i++){ // Avec les deux boucles for
-	// 	for(int j=i+1; j<a.nb_etats; j++){ // On regard s'ils sont dans le même groupe
-	// 		if(groupe[i] != groupe[j]){
-	// 			for(int s=0; s<a.etat[i].nb_transition; s++){
-	// 				for(int k=0; k<a.etat[j].nb_transition; k++){
-	// 					depart = a.etat[i].arrayTrans[s].depart;
-	// 					caractere = a.etat[i].arrayTrans[s].caractere;
-	// 					arrive = a.etat[i].arrayTrans[s].arrive;
-
-
-	// 					depart2 = a.etat[j].arrayTrans[k].depart;
-	// 					caractere2 = a.etat[j].arrayTrans[k].caractere;
-	// 					arrive2 = a.etat[j].arrayTrans[k].arrive;
-
-	// 					if( (i == arrive || j == arrive2) ){ // Regard si c'est le mm groupe
-	// 						if(groupe[arrive] == groupe[arrive2]){
-	// 							if(caractere == caractere2){
-	// 								// printf("Hello: %d %d\n", groupe[depart], groupe[depart2]);
-	// 								// printf("Hello: %d %d\n", groupe[arrive], groupe[arrive2]);
-	// 								printf("%d %d\n", i, j);
-	// 								printf("%c %c \n\n", caractere, caractere2);
-	// 								printf("%d\n", i, groupe[arrive]);
-	// 							}
-	// 						}
-	// 					}
-	// 				}
-	// 			}
-	// 		} 
-	// 	}
-	// }
-
-	// printf("\n");
-	// for(int i=0; i<a.nb_etats; i++)
-	// 	printf("%d ", i);
-	// printf("\n");
-	// for(int i=0; i<a.nb_etats; i++)
-	// 	printf("%d ", groupe[i]);
-	// printf("\n\n\n");
-
-	// returned.nb_etats = groupe_different_tt(groupe, a.nb_etats);
-	// returned.taille_alphabet = a.taille_alphabet;
-	// for(int i=0; i<a.taille_alphabet; i++){
-	// 	returned.alphabet[i] = a.alphabet[i];
-	// }
-
-	// for(int i=0; i<a.nb_etats; i++) // cherche état initial
-	// 	if(a.etat[i].initial == true){
-	// 		printf("%d \n", i);
-	// 		returned = set_etat_AFD(returned, 0, 0, true, false, a.etat[i].nb_transition);
-	// 		for(int j=0; j<a.etat[i].nb_transition; j++){
-	// 			returned = set_transition_AFD(returned, i, j, a.etat[i].arrayTrans[j].arrive, a.etat[i].arrayTrans[j].caractere);
-	// 		}
-	// 	}
-		
-	// for(int i=0; i<a.nb_etats; i++){
-	// 	if(a.etat[i].initial == false)
-	// 		if(a.etat[i].accepteur == true)
-	// 			returned = set_etat_AFD(returned, i, i, false, true, a.etat[i].nb_transition);
-	// 		else
-	// 			returned = set_etat_AFD(returned, i, i, false, false, a.etat[i].nb_transition);
-	// 		for(int j=0; j<a.etat[i].nb_transition; j++)
-	// 			returned = set_transition_AFD(returned, i, j, a.etat[i].arrayTrans[j].arrive, a.etat[i].arrayTrans[j].caractere);
-			
-	// }
-
-
-	return returned;
-		
 }
 
 
